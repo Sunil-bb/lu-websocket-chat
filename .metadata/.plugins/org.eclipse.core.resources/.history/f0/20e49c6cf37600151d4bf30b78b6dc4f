@@ -1,0 +1,22 @@
+package com.example.wschat.config;
+
+import org.springframework.context.annotation.Configuration;
+import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
+
+@Configuration
+public class WebSocketSecurityConfig implements WebSocketMessageBrokerConfigurer {
+
+	@Override
+	protected void configureInbound(MessageSecurityMetadataSourceRegistry messages) {
+		messages
+				// users cannot send to these broker destinations, only the application can
+		 		.simpMessageDestMatchers("/topic/chat.login", "/topic/chat.logout", "/topic/chat.message").denyAll()
+				.anyMessage().authenticated();
+	}
+
+	@Override
+	protected boolean sameOriginDisabled() {
+		//disable CSRF for websockets for now...
+		return true;
+	}
+}

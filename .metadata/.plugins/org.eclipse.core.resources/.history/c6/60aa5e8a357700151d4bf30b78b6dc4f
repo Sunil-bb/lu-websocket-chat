@@ -1,0 +1,87 @@
+package com.example;
+
+import java.util.concurrent.CountDownLatch;
+
+import javax.sound.midi.Receiver;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.data.redis.listener.PatternTopic;
+import org.springframework.data.redis.listener.RedisMessageListenerContainer;
+import org.springframework.data.redis.listener.adapter.MessageListenerAdapter;
+
+import com.example.receiver.EduReceiver;
+import com.example.receiver.MedReceiver;
+import com.example.receiver.PolReceiver;
+
+
+@SpringBootApplication
+public class LuCharRcApplication {
+	
+	
+	/*public static void main(String[] args) {
+		SpringApplication.run(LuCharRcApplication.class, args);
+	}*/
+
+    public static void main(String[] args) {
+        SpringApplication.run(LuCharRcApplication.class, args);
+    }
+    
+    @Bean
+	MessageListenerAdapter medlistenerAdapter(MedReceiver receiver) {
+		return new MessageListenerAdapter(receiver, "receiveMessage");
+	}
+    
+    @Bean
+   	MessageListenerAdapter edulistenerAdapter(EduReceiver receiver) {
+   		return new MessageListenerAdapter(receiver, "receiveMessage");
+   	}
+    
+    @Bean
+   	MessageListenerAdapter pollistenerAdapter(PolReceiver receiver) {
+   		return new MessageListenerAdapter(receiver, "receiveMessage");
+   	}
+    
+    @Bean
+   	MessageListenerAdapter scilistenerAdapter(ScieReceiver receiver) {
+   		return new MessageListenerAdapter(receiver, "receiveMessage");
+   	}
+	
+	
+	@Bean
+	Receiver receiver(CountDownLatch latch) {
+		return new Receiver(latch);
+	}
+
+	@Bean
+	CountDownLatch latch() {
+		return new CountDownLatch(1);
+	}
+	
+	/*@Bean
+	JedisConnectionFactory jedisConnectionFactory() {
+		JedisConnectionFactory jd = new JedisConnectionFactory();
+		jd.setHostName("localhost");
+		jd.setPort(6379);
+		
+		return jd;
+		
+	}*/
+	
+	@Bean
+	RedisMessageListenerContainer container(RedisConnectionFactory connectionFactory,
+			MessageListenerAdapter medlistenerAdapter,MessageListenerAdapter edulistenerAdapter,MessageListenerAdapter pollistenerAdapter,MessageListenerAdapter scilistenerAdapter ) {
+		
+		
+		RedisMessageListenerContainer container = new RedisMessageListenerContainer();
+		container.setConnectionFactory(connectionFactory);
+		container.addMessageListener(medlistenerAdapter, new PatternTopic("MEDICAL"));
+		container.addMessageListener(edulistenerAdapter, new PatternTopic("EDUCATIONS"));
+		container.addMessageListener(pollistenerAdapter, new PatternTopic("POLITICS"));
+		container.addMessageListener(scilistenerAdapter, new PatternTopic("SCIENCE"));
+
+		return container;
+	}
+}

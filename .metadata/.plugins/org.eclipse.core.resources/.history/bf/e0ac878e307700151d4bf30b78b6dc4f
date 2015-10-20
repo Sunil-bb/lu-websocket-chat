@@ -1,0 +1,57 @@
+package com.example.receiver;
+
+import java.util.concurrent.CountDownLatch;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Bean;
+import org.springframework.integration.channel.DirectChannel;
+import org.springframework.messaging.Message;
+import org.springframework.messaging.MessageChannel;
+import org.springframework.messaging.simp.stomp.StompCommand;
+import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
+import org.springframework.messaging.support.MessageBuilder;
+
+public class Receiver {
+    private static final Logger LOGGER = LoggerFactory.getLogger(Receiver.class);
+
+    private CountDownLatch latch;
+
+    @Autowired
+    public Receiver(CountDownLatch latch) {
+        this.latch = latch;
+    }
+    
+    @Bean
+	public MessageChannel webSocketOutputChannel() {
+		return new DirectChannel();
+	}
+
+    public void receiveMessage(String message) {
+        LOGGER.info("Received <" + message + ">");
+        
+     
+		StompHeaderAccessor headers = StompHeaderAccessor.create(StompCommand.SEND);
+		//headers.setSubscriptionId("subs1");
+		headers.setDestination("/app/MEDICAL");
+		Message<String> message2 = MessageBuilder.withPayload(message).setHeaders(headers).build();
+
+		this.webSocketOutputChannel().send(message2);
+        
+        
+        
+        /*List<Transport> transports = new ArrayList<>(2);
+        transports.add(new WebSocketTransport(new StandardWebSocketClient()));
+        transports.add(new RestTemplateXhrTransport());
+        
+        SockJsClient sockJsClient = new SockJsClient(transports);
+        System.out.println("SOCK JS UP "+sockJsClient.isRunning());
+        
+        sockJsClient.doHandshake(new LUWebSocketHandler(), "ws://localhost:10001/ws/app/MEDICAL");
+        
+        System.out.println("SOCK JS UP "+sockJsClient.isRunning()); */
+        latch.countDown();
+    }
+}

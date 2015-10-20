@@ -1,0 +1,21 @@
+package com.lu.controller;
+
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+
+
+@RestController
+public class ChatController {
+	
+		
+	@RequestMapping(value = "/chatUp", method = RequestMethod.POST)
+	public boolean publishManualFile(
+			@RequestBody String chatVal) {
+		
+		retunr true;
+	}
+	
+	
+}

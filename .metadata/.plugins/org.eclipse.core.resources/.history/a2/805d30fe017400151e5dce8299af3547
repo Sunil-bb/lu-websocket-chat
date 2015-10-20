@@ -1,0 +1,54 @@
+package com.lu.controller;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.listener.adapter.MessageListenerAdapter;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+
+
+
+
+@RestController
+public class ChatController {
+	
+	
+	@Autowired
+	StringRedisTemplate template;
+	
+	@Bean
+	JedisConnectionFactory jedisConnectionFactory() {
+		JedisConnectionFactory jd = new JedisConnectionFactory();
+		jd.setHostName("localhost");
+		jd.setPort(6379);
+		
+		return jd;
+		
+	}
+	
+	@Bean
+	StringRedisTemplate template(JedisConnectionFactory jedisConnectionFactory) {
+		
+		return new StringRedisTemplate(jedisConnectionFactory);
+	}
+
+	
+	
+	
+		
+	@RequestMapping(value = "/chatUp", method = RequestMethod.POST)
+	public boolean publishManualFile(
+			@RequestBody String chatVal) {
+		
+		template.convertAndSend("chat", chatVal);
+		
+		return true;
+	}
+	
+	
+}

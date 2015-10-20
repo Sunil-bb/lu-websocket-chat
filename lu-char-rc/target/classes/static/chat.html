@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="springChat">
+	<head>
+	  <meta charset="utf-8" />
+	  <title>Spring WebSocket Chat</title>
+	  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	
+	 
+
+
+      
+	  <link href="css/chat.css" rel="stylesheet">	  
+	</head>
+	<body>
+		
+		<div class="container" ng-controller="ChatController">
+			<toaster-container></toaster-container>
+			
+			<div class="row">
+				<nav class="navbar navbar-inverse navbar-embossed" role="navigation">
+		            <div class="collapse navbar-collapse" id="navbar-collapse-01">
+		              <h1>LU Subscribe</h1>
+		              <ul class="nav navbar-nav navbar-right">           
+		              	
+		               </ul>
+		            </div><!-- /.navbar-collapse -->
+		          </nav><!-- /navbar -->
+			</div>
+
+
+	        <div class="row">
+        	
+	        	<form action="" class="form-horizontal row-border">
+		        		<div class="col-xs-4">
+		        			<h4>Available TOPICS </h4>
+		        			<div class="share">
+
+		        					<span ng-repeat="topic in topics">
+      									<label class="checkbox" for="{{topic.name}}">
+        									<input type="checkbox" ng-model="selectedtopics.names[topic.name]" name="group" id="{{topic.name}}" />
+        											{{topic.name}}
+      										</label>
+    								</span>
+    	        			</div>
+		        		</div>
+		        	
+        		</form>
+        	</div>
+
+        	<div class="row">
+        		<button ng-click="subscribe()"> SUBSCRIBE </button>
+        	</div>
+
+        	<div class="row">
+				<div class="col-xs-8 chat-box">
+        			<h4>Messages</h4>
+	        		<div ng-repeat="message in messages">
+	       	 			<small print-message></small>
+	      			</div>
+        		</div>
+        	</div>
+        	
+	    </div>
+	    <!-- /.container -->
+	
+	</body>
+</html>

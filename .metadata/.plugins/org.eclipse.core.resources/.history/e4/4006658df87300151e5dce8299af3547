@@ -1,0 +1,7 @@
+#properties file location
+#port for tomcat
+server.port: 10001
+#tomcat server address
+server.address: 127.0.0.1
+#tomcat server contaxt path
+server.context-path=/chatRs

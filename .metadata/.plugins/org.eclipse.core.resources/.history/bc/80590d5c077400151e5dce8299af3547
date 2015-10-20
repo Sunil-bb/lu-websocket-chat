@@ -1,0 +1,18 @@
+package com.example;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+import com.example.receiver.RedisReceiver;
+
+@SpringBootApplication
+public class LuCharRcApplication {
+
+    public static void main(String[] args) {
+        SpringApplication.run(LuCharRcApplication.class, args);
+    }
+    
+    @Autowired
+    RedisReceiver redisReceiver;
+}

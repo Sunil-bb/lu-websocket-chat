@@ -1,0 +1,56 @@
+package com.example;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Import;
+
+
+@SpringBootApplication
+public class LuCharRcApplication {
+	
+	
+	public static void main(String[] args) {
+		SpringApplication.run(LuCharRcApplication.class, args);
+	}
+
+    /*public static void main(String[] args) {
+        SpringApplication.run(LuCharRcApplication.class, args);
+    }
+    */
+   /* @Bean
+	MessageListenerAdapter listenerAdapter(Receiver receiver) {
+		return new MessageListenerAdapter(receiver, "receiveMessage");
+	}
+	
+	
+	@Bean
+	Receiver receiver(CountDownLatch latch) {
+		return new Receiver(latch);
+	}
+
+	@Bean
+	CountDownLatch latch() {
+		return new CountDownLatch(1);
+	}
+	
+	@Bean
+	JedisConnectionFactory jedisConnectionFactory() {
+		JedisConnectionFactory jd = new JedisConnectionFactory();
+		jd.setHostName("localhost");
+		jd.setPort(6379);
+		
+		return jd;
+		
+	}
+	
+	@Bean
+	RedisMessageListenerContainer container(RedisConnectionFactory connectionFactory,
+			MessageListenerAdapter listenerAdapter) {
+
+		RedisMessageListenerContainer container = new RedisMessageListenerContainer();
+		container.setConnectionFactory(connectionFactory);
+		container.addMessageListener(listenerAdapter, new PatternTopic("topic"));
+
+		return container;
+	}*/
+}
